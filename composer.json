@@ -1,0 +1,47 @@
+{
+    "name": "be/wc-bexexpress",
+    "description": "Bexexpress integration",
+    "type": "wp-plugin",
+    "require": {
+        "php": ">=8.0",
+        "twig/twig": "^3.14",
+        "php-di/php-di": "^7.0",
+        "coenjacobs/mozart": "^0.7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "WC_BE\\": "app/"
+        },
+        "files": [
+            "app/Dependencies/DI/functions.php"
+        ]
+    },
+    "extra": {
+        "mozart": {
+            "dep_namespace": "WC_BE\\Dependencies\\",
+            "dep_directory": "/app/Dependencies/",
+            "classmap_directory": "/classes/dependencies/",
+            "classmap_prefix": "WC_BE_",
+            "packages": [
+                "twig/twig",
+                "psr/container",
+                "php-di/php-di"
+            ],
+            "excluded_packages": [],
+            "override_autoload": [],
+            "delete_vendor_directories": true
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "vendor/bin/mozart compose",
+            "php update-composer-autoload.php",
+            "composer dump-autoload"
+        ],
+        "post-update-cmd": [
+            "vendor/bin/mozart compose",
+            "php update-composer-autoload.php",
+            "composer dump-autoload"
+        ]
+    }
+}

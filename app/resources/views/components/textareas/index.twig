@@ -1,0 +1,8 @@
+{% set id = id is defined ? class : '' %}
+{% set rows = rows is defined ? rows : '10' %}
+{% set readonly = readonly is defined ? 'readonly' : '' %}
+{% set content = content is defined ? content : '' %}
+
+<textarea id="{{ id }}" rows="{{ rows }}" style="min-width: 100%;"{{ readonly }}>
+    {{ content }}
+</textarea>

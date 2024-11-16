@@ -1,0 +1,32 @@
+{% set levelColors = {
+    'DEBUG': '#4A26FD',
+    'INFO': '#AAF255',
+    'WARNING': '#FFDE03',
+    'ERROR': '#B00020'
+} %}
+<div class="wrap">
+    <table class="wp-list-table widefat fixed striped">
+        <thead>
+        <tr>
+            {% for header in content.0 %}
+                <th scope="col">{{ header }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% if content.1 is empty %}
+            <tr>
+                <td colspan="{{ content.0 | length }}" style="text-align: center;">No log entries found.</td>
+            </tr>
+        {% else %}
+            {% for log in content.1 %}
+                <tr>
+                    <td>{{ log.date }}</td>
+                    <td style="color: {{ levelColors[log.level] }};font-weight: bold">{{ log.level }}</td>
+                    <td>{{ log.message }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+</div>

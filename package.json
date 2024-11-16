@@ -1,0 +1,18 @@
+{
+  "name": "instagram-data-fetcher",
+  "version": "1.0.0",
+  "description": "A WordPress plugin for fetching data from instagram platform.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.6",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
+  },
+  "dependencies": {
+    "vite": "^5.4.8"
+  }
+}

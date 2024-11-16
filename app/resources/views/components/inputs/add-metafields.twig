@@ -1,0 +1,11 @@
+{% set label = label is defined ? label : '' %}
+{% set name = name is defined ? name : '' %}
+{% set value = value is defined ? value : '' %}
+{% set type = type is defined ? type : 'text' %}
+{% set placeholder = placeholder is defined ? placeholder : "" %}
+{% set checked = checked is defined ? checked : '' %}
+
+<div>
+    <label for="metafield_{{ name }}">{{ label }}</label>
+    <input type="{{ type }}" name="ps_{{ name }}" value="{{ value }}" id="metafield_{{ name }}" placeholder="{{ placeholder }}" {{ checked }}>
+</div>
