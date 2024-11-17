@@ -1,0 +1,11 @@
+<div class="wrap">
+    <h1>{{ title }}</h1>
+    <div>
+        <form method="post" action="">
+            {{ nonce_field|raw }}
+            <label for="wc-be-api-token">Api Token:</label>
+            <input type="text" id="wc-be-api-token" name="wc-be-api-token" required />
+            <input type="submit" name="wc_be_save_api_token" value="Save Token" class="button button-primary" />
+        </form>
+    </div>
+</div>

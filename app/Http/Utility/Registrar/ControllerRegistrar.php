@@ -25,7 +25,7 @@ class ControllerRegistrar
 
     private function defaultPath(): void
     {
-        $this->dirname = str_replace('\\', '/', PS_QR_ACCESS_PLUGIN_DIR) . 'app/Http/Controllers';
+        $this->dirname = str_replace('\\', '/', WC_BE_PLUGIN_DIR) . 'app/Http/Controllers';
     }
 
     /**
