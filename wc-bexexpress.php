@@ -9,6 +9,9 @@
  * Domain Path: /languages
  */
 
+use WC_BE\Http\Template\BexShippingMethod;
+use WC_BE\Init;
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
@@ -33,6 +36,5 @@ add_action( 'plugins_loaded', function () {
         return;
     }
 
-    $init = new \WC_BE\Init();
-    $init->register();
-} );
+    (new Init())->register();
+});

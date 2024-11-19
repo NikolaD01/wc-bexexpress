@@ -11,6 +11,7 @@ use WC_BE\Dependencies\Psr\Container\ContainerExceptionInterface;
 use WC_BE\Dependencies\Psr\Container\ContainerInterface;
 use WC_BE\Dependencies\Psr\Container\NotFoundExceptionInterface;
 use WC_BE\Http\Providers\AppServiceProvider;
+use WC_BE\Http\Template\BexShippingMethod;
 use WC_BE\Http\Utility\Registrar\ControllerRegistrar;
 
 class Init
@@ -42,6 +43,9 @@ class Init
     public function register(): void
     {
         new EventListener();
+
+        new BexShippingMethod();
+
         $controllerRegistrar = new ControllerRegistrar($this->container);
         $controllerRegistrar->register();
     }
