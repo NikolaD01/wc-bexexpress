@@ -16,6 +16,12 @@ class Fields
                 'description' => __('Bex API Token', 'bex-express-shipping'),
                 'required' => true
             ),
+            'shipping_amount' => array(
+                'title' => __('Fixed shipping amount (RSD)', 'bex-express-shipping'),
+                'type' => 'text',
+                'default' => '400',
+                'required' => true
+            ),
             'bex_shipment_id' => array(
                 'title' => __('ShipmentId *', 'bex-express-shipping'),
                 'type' => 'text',
