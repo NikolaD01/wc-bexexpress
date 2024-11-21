@@ -3,19 +3,17 @@
 namespace WC_BE\Http\MetaBox;
 
 use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
+use WC_BE\Core\Contracts\MetaBoxInterface;
 use WC_BE\Dependencies\Twig\Error\LoaderError;
 use WC_BE\Dependencies\Twig\Error\RuntimeError;
 use WC_BE\Dependencies\Twig\Error\SyntaxError;
-use WC_BE\Http\Contracts\MetaBox\MetaBoxInterface;
 use WC_BE\Http\Utility\Helpers\View;
-use function cli\err;
 
 class ProductMetaBox implements MetaBoxInterface
 {
 
     public function addMetaBox(): void
     {
-        error_log(print_r($this, true));
         $screen = class_exists( '\Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController' ) && wc_get_container()->get( CustomOrdersTableController::class )->custom_orders_table_usage_is_enabled()
             ? wc_get_page_screen_id( 'shop-order' )
             : 'shop_order';

@@ -3,10 +3,12 @@
 namespace WC_BE;
 
 use Exception;
+use WP_CLI;
 
 
-use WC_BE\Core\EventListener;
+use WC_BE\Core\Commands\SeedCommand;
 use WC_BE\Core\Managers\MetaBoxManager;
+use WC_BE\Core\Managers\TableManager;
 use WC_BE\Dependencies\DI\ContainerBuilder;
 use WC_BE\Dependencies\Psr\Container\ContainerExceptionInterface;
 use WC_BE\Dependencies\Psr\Container\ContainerInterface;
@@ -44,14 +46,24 @@ class Init
     public function register(): void
     {
 
+        new TableManager();
         new BexShippingMethod();
         new MetaBoxManager();
+        $this->setCommands();
 
         $controllerRegistrar = new ControllerRegistrar($this->container);
         $controllerRegistrar->register();
     }
 
-    public function getContainer() {
+    public function setCommands() : void
+    {
+
+        if (defined('WP_CLI') && WP_CLI) {
+            WP_CLI::add_command('wc-bex seed', [SeedCommand::class, 'run']);
+        }
+    }
+    public function getContainer()
+    {
         return $this->container;
     }
 }

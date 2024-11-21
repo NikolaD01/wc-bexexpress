@@ -2,9 +2,8 @@
 
 namespace WC_BE\Core\Factories;
 
-use WC_BE\Http\Contracts\MetaBox\MetaBoxInterface;
+use WC_BE\Core\Contracts\MetaBoxInterface;
 use WC_BE\Http\MetaBox\ProductMetaBox;
-use function cli\err;
 
 class MetaBoxFactory
 {

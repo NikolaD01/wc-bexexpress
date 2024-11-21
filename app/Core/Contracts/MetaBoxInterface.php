@@ -1,6 +1,6 @@
 <?php
 
-namespace WC_BE\Http\Contracts\MetaBox;
+namespace WC_BE\Core\Contracts;
 
 interface MetaBoxInterface
 {

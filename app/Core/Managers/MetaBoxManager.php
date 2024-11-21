@@ -2,8 +2,8 @@
 
 namespace WC_BE\Core\Managers;
 
+use WC_BE\Core\Contracts\MetaBoxInterface;
 use WC_BE\Core\Factories\MetaBoxFactory;
-use WC_BE\Http\Contracts\MetaBox\MetaBoxInterface;
 
 class MetaBoxManager
 {
