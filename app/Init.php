@@ -3,6 +3,7 @@
 namespace WC_BE;
 
 use Exception;
+use WC_BE\Http\Template\BexCheckout;
 use WP_CLI;
 
 use WC_BE\Core\Commands\DropCommand;
@@ -48,6 +49,7 @@ class Init
 
         new TableManager();
         new BexShippingMethod();
+        new BexCheckout();
         new MetaBoxManager();
         $this->setCommands();
 
