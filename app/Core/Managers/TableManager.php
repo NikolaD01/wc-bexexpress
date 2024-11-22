@@ -22,8 +22,7 @@ class TableManager
      */
     private function initializeTables(): void
     {
-        if ($this->shouldRunTableSetup())
-        {
+        if ($this->shouldRunTableSetup()) {
             $this->createMunicipalitiesTable();
             $this->createPlacesTable();
             $this->createStreetsTable();
@@ -45,10 +44,7 @@ class TableManager
      */
     private function tableExists(string $table_name): bool
     {
-        $query = $this->db()->prepare(
-            "SHOW TABLES LIKE %s",
-            $table_name
-        );
+        $query = $this->db()->prepare("SHOW TABLES LIKE %s", $table_name);
         return (bool) $this->db()->get_var($query);
     }
 
@@ -63,7 +59,7 @@ class TableManager
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL
-        ) {$charset_collate};";
+        ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
@@ -82,8 +78,8 @@ class TableManager
             name VARCHAR(255) NOT NULL,
             municipalities_id BIGINT UNSIGNED NOT NULL,
             zip VARCHAR(20) NOT NULL,
-            KEY (municipalities_id) -- For adding the foreign key
-        ) {$charset_collate};";
+            KEY (municipalities_id)
+        ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
@@ -101,8 +97,8 @@ class TableManager
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             place_id BIGINT UNSIGNED NOT NULL,
-            KEY (place_id) -- For adding the foreign key
-        ) {$charset_collate};";
+            KEY (place_id)
+        ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
@@ -118,23 +114,21 @@ class TableManager
         $streets_table = $this->db()->prefix . 'streets';
 
         $queries = [
-            // Add foreign key to `places` table
             "ALTER TABLE {$places_table} 
-         ADD CONSTRAINT fk_places_municipalities 
-         FOREIGN KEY (municipalities_id) 
-         REFERENCES {$municipalities_table}(id) 
-         ON DELETE CASCADE ON UPDATE CASCADE;",
+             ADD CONSTRAINT fk_places_municipalities 
+             FOREIGN KEY (municipalities_id) 
+             REFERENCES {$municipalities_table}(id) 
+             ON DELETE CASCADE ON UPDATE CASCADE;",
 
             // Add foreign key to `streets` table
             "ALTER TABLE {$streets_table} 
-         ADD CONSTRAINT fk_streets_places 
-         FOREIGN KEY (place_id) 
-         REFERENCES {$places_table}(id) 
-         ON DELETE CASCADE ON UPDATE CASCADE;"
+             ADD CONSTRAINT fk_streets_places 
+             FOREIGN KEY (place_id) 
+             REFERENCES {$places_table}(id) 
+             ON DELETE CASCADE ON UPDATE CASCADE;"
         ];
 
-        foreach ($queries as $query)
-        {
+        foreach ($queries as $query) {
             $this->db()->query($query);
         }
     }

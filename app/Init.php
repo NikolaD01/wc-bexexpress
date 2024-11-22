@@ -5,7 +5,7 @@ namespace WC_BE;
 use Exception;
 use WP_CLI;
 
-
+use WC_BE\Core\Commands\DropCommand;
 use WC_BE\Core\Commands\SeedCommand;
 use WC_BE\Core\Managers\MetaBoxManager;
 use WC_BE\Core\Managers\TableManager;
@@ -60,6 +60,7 @@ class Init
 
         if (defined('WP_CLI') && WP_CLI) {
             WP_CLI::add_command('wc-bex seed', [SeedCommand::class, 'run']);
+            WP_CLI::add_command('wc-bex drop', [DropCommand::class, 'run']);
         }
     }
     public function getContainer()
