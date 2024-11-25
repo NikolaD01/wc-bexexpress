@@ -37,7 +37,6 @@ class ControllerRegistrar
         foreach ($this->getControllers() as $controllerClass) {
             $controller = $this->container->get($controllerClass);
         }
-        (new ScriptRegister())->enqueue('wc-beexpress','public/main.js');
 
     }
 

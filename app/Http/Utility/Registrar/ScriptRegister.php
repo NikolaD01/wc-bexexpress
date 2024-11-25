@@ -12,10 +12,10 @@ class ScriptRegister
     {
         $this->handle = $handle;
         $this->path = $path;
-
-        add_action('admin_enqueue_scripts', [$this, 'register']);
+        add_action('wp_enqueue_scripts', [$this, 'register'], 9999);
     }
     public function register() : void {
+
         wp_enqueue_script(
             $this->handle,
             plugins_url($this->path, dirname(__DIR__, 3)),

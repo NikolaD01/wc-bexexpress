@@ -3,7 +3,9 @@
 namespace WC_BE;
 
 use Exception;
+use WC_BE\Core\Managers\AjaxManager;
 use WC_BE\Http\Template\BexCheckout;
+use WC_BE\Http\Utility\Registrar\ScriptRegister;
 use WP_CLI;
 
 use WC_BE\Core\Commands\DropCommand;
@@ -40,10 +42,10 @@ class Init
         $this->container = $builder->build();
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
+//    /**
+//     * @throws ContainerExceptionInterface
+//     * @throws NotFoundExceptionInterface
+//     */
     public function register(): void
     {
 
@@ -51,10 +53,12 @@ class Init
         new BexShippingMethod();
         new BexCheckout();
         new MetaBoxManager();
+        new AjaxManager();
         $this->setCommands();
+        (new ScriptRegister())->enqueue('wc-bexpress','public/main.js');
 
-        $controllerRegistrar = new ControllerRegistrar($this->container);
-        $controllerRegistrar->register();
+//        $controllerRegistrar = new ControllerRegistrar($this->container);
+//        $controllerRegistrar->register();
     }
 
     public function setCommands() : void

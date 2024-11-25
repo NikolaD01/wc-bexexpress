@@ -80,6 +80,44 @@ abstract class BaseRepository implements RepositoryInterface {
         return $this->db()->get_results($sql);
     }
 
+
+    /**
+     * Get all records from the table with a WHERE clause and customizable SELECT columns.
+     *
+     * @param array|null $where Associative array of conditions ['column' => 'value'].
+     * @param array|null $select Array of column names to retrieve, or null to select all columns.
+     * @return array|null Array of results as objects, or null if no records are found.
+     */
+    public function getAllWhere(array $where = null, array $select = null): ?array
+    {
+
+        $columns = '*';
+        if ($select) {
+            $columns = implode(', ', array_map(function ($column) {
+                return "`{$column}`";
+            }, $select));
+        }
+
+        $conditions = [];
+        $values = [];
+        if ($where) {
+            foreach ($where as $key => $value) {
+                $conditions[] = "`{$key}` = %s";
+                $values[] = $value;
+            }
+        }
+
+        $sql = "SELECT {$columns} FROM {$this->table}";
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(" AND ", $conditions);
+        }
+
+        $prepared_query = $this->db()->prepare($sql, $values);
+
+        return $this->db()->get_results($prepared_query);
+    }
+
+
     /**
      * Get a single record by conditions.
      *

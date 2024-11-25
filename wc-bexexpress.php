@@ -37,4 +37,12 @@ add_action( 'plugins_loaded', function () {
     }
 
     (new Init())->register();
+
+    if (wp_script_is('wc-bexpress', 'enqueued')) {
+        // Script is enqueued
+        error_log('wc-bexpress script is enqueued!');
+    } else {
+        // Script is not enqueued
+        error_log('wc-bexpress script is NOT enqueued.');
+    }
 });

@@ -3,8 +3,10 @@ import * as path from 'path';
 
 
 export default defineConfig({
+    publicDir: 'static',
     build: {
         outDir: 'public',
+        emptyOutDir: false,
         rollupOptions: {
             input: './src/main.ts',
             output: {
