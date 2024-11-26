@@ -54,6 +54,12 @@ class Fields
                 'default' => '0',
                 'description' => __('Total shipment weight always 0', 'bex-express-shipping'),
             ),
+            'bex_shipment_contents' => array(
+                'title' => __('Shipment Contents *', 'bex-express-shipping'),
+                'type' => 'text',
+                'default' => '1',
+                'description' => __('Name of content inside, from documentation 1 stands for "Kućni uređaji"', 'bex-express-shipping'),
+            ),
             'bex_invoice_amount' => array(
                 'title' => __('invoice Amount *', 'bex-express-shipping'),
                 'type' => 'text',

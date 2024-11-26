@@ -1,32 +1,55 @@
-{% set levelColors = {
-    'DEBUG': '#4A26FD',
-    'INFO': '#AAF255',
-    'WARNING': '#FFDE03',
-    'ERROR': '#B00020'
-} %}
 <div class="wrap">
-    <table class="wp-list-table widefat fixed striped">
-        <thead>
-        <tr>
-            {% for header in content.0 %}
-                <th scope="col">{{ header }}</th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% if content.1 is empty %}
+    <button id="update-all-fields" class="button button-primary">Update All Fields</button>
+    <form id="update-fields-form">
+        <table class="wp-list-table widefat fixed striped">
+            <thead>
             <tr>
-                <td colspan="{{ content.0 | length }}" style="text-align: center;">No log entries found.</td>
+                {% for header in headers %}
+                    <th scope="col">{{ header }}</th>
+                {% endfor %}
             </tr>
-        {% else %}
-            {% for log in content.1 %}
+            </thead>
+            <tbody>
+            {% if data is empty %}
                 <tr>
-                    <td>{{ log.date }}</td>
-                    <td style="color: {{ levelColors[log.level] }};font-weight: bold">{{ log.level }}</td>
-                    <td>{{ log.message }}</td>
+                    <td colspan="{{ headers | length }}" style="text-align: center;">No entries found.</td>
                 </tr>
-            {% endfor %}
-        {% endif %}
-        </tbody>
-    </table>
+            {% else %}
+                {% for row in data %}
+                    <tr>
+                        {% for field in headers %}
+                            <td>
+                                {% if field == 'Value' %}
+                                    {# Render an input element with the name derived from the 'Name' field #}
+                                    <input
+                                            type="text"
+                                            name="{{ row['Name']|lower|replace({'_': ''}) }}"
+                                            value="{{ row['Value']|default('') }}"
+                                            class="regular-text"
+                                    />
+                                {% else %}
+                                    {{ row[field]|default('N/A') }}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </form>
 </div>
+
+<script>
+    document.getElementById('update-all-fields').addEventListener('click', function() {
+        const formData = new FormData(document.getElementById('update-fields-form'));
+
+        // Example: Output form data to console
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        // Replace the following with your AJAX/fetch logic
+        alert('Update all fields functionality triggered!');
+    });
+</script>

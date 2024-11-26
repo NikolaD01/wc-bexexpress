@@ -20,7 +20,7 @@ class ProductMetaBox implements MetaBoxInterface
 
         add_meta_box(
             'bex_order_meta_box',
-            __('Custom Product Meta', 'text-'),
+            __('BexExpress', 'text-'),
             [$this, 'renderMetaBox'],
             $screen,
             'normal',
@@ -35,7 +35,12 @@ class ProductMetaBox implements MetaBoxInterface
      */
     public function renderMetaBox($object): void
     {
-        View::render('test.twig');
+        View::render('dashboard.twig', [
+            'headers' => ['Name', 'Value'],
+            'data' => [
+                ['Name' => 'commentPublic', 'Value' => 'Test comment',],
+                ['Name' => 'commentPrivate', 'Value' => '',],
+            ]]);
     }
 
     public function saveMetaBox($post_id): void
