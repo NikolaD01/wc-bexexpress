@@ -35,4 +35,30 @@ class BexExpressClientService extends AbstractClientService
 
         return $this->post($endpoint, $shipmentData, $options);
     }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function getLabel(int $shipmentId, int $parcelNo = 1): mixed
+    {
+        $endpoint = '/shipDNF/ship/getLabel';
+
+        $queryParams = [
+            'shipmentId' => $shipmentId,
+            'parcelNo' => $parcelNo,
+        ];
+
+        $queryString = http_build_query($queryParams);
+        $url = $endpoint . '?' . $queryString;
+
+        $options = [
+            'headers' => [
+                'X-AUTH-TOKEN' => $this->authToken,
+                'Content-Type' => 'application/json',
+            ],
+        ];
+
+        return $this->get($url, $options);
+    }
+
 }

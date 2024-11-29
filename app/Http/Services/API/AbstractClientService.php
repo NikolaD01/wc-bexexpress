@@ -34,9 +34,7 @@ class AbstractClientService
      */
     public function get(string $endpoint, array $options = []) : mixed
     {
-        return $this->client->get($endpoint, [
-            'timeout' => 10.0,
-        ]);
+        return $this->client->get($endpoint, $options)->getBody()->getContents();
     }
 
     /**
@@ -45,6 +43,6 @@ class AbstractClientService
     public function post(string $endpoint, array $data, array $options = []) : mixed
     {
 
-        return $this->client->post($endpoint, array_merge($options, ['json' => $data]));
+        return $this->client->post($endpoint, array_merge($options, ['json' => $data]))->getBody()->getContents();
     }
 }

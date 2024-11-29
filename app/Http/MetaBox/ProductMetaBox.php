@@ -35,7 +35,12 @@ class ProductMetaBox implements MetaBoxInterface
      */
     public function renderMetaBox($object): void
     {
+
+
+        $order_id  = $object->id ?? get_the_ID();
+
         View::render('dashboard.twig', [
+            'shipmentCreated' =>  (bool)get_post_meta($order_id, '_bex_shipment_id', true),
             'headers' => ['Name', 'Value'],
             'data' => [
                 ['commentPublic', get_post_meta($order_id, 'bex_commentpublic', true)],
@@ -50,22 +55,5 @@ class ProductMetaBox implements MetaBoxInterface
     }
 
     public function saveMetaBox(): void
-    {
-        $post_id = $_GET['id'];
-        $meta_fields = [
-            'bex_commentpublic',
-            'bex_commentprivate',
-            'bex_personaldelivery',
-            'bex_returnsignedinvoices',
-            'bex_returnpackage',
-            'bex_paytosenderviaaccount',
-            'bex_banktransfercomment',
-        ];
-    error_log('test upade');
-        foreach ($meta_fields as $field) {
-            if (isset($_POST[$field])) {
-                update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
-            }
-        }
-    }
+    {}
 }

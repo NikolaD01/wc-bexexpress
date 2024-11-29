@@ -30,6 +30,10 @@
         </tbody>
     </table>
     <p>
-        <button class="button" id="bexCreateShipment">Create Order</button>
+        {% if not shipmentCreated %}
+            <button class="button" id="bexCreateShipment">Create Order</button>
+        {% else %}
+            <button class="button" id="bexCreateLabel">Create Label</button>
+        {% endif %}
     </p>
 </div>

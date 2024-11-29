@@ -1,4 +1,5 @@
 import {CreateOrder} from "@/classes/createOrder";
+import {GetLabel} from "@/classes/getLabel";
 
 declare global {
     interface Window {
@@ -15,6 +16,7 @@ const init = () => {
     const ajax = window.admin_globals.ajax_url;
     try {
         new CreateOrder(ajax, 'bexCreateShipment');
+        new GetLabel(ajax, 'bexCreateLabel');
     } catch (error) {
     }
 };

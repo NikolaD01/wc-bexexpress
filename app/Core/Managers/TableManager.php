@@ -61,7 +61,6 @@ class TableManager
             name VARCHAR(255) NOT NULL
         ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
     }
 
@@ -81,7 +80,6 @@ class TableManager
             KEY (municipalities_id)
         ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
     }
 
@@ -98,6 +96,33 @@ class TableManager
             name VARCHAR(255) NOT NULL,
             place_id BIGINT UNSIGNED NOT NULL,
             KEY (place_id)
+        ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
+
+        dbDelta($sql);
+    }
+    /**
+     * Create the parcels table.
+     */
+    private function createParcelsTable(): void
+    {
+        $table_name = $this->db()->prefix . 'parcels'; // Change to your desired table name
+        $charset_collate = $this->db()->get_charset_collate();
+
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            code INT NOT NULL,
+            regionId INT NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            state VARCHAR(100) NOT NULL,
+            postalCode INT NOT NULL,
+            city VARCHAR(255) NOT NULL,
+            street VARCHAR(255) NOT NULL,
+            houseNumber VARCHAR(50) NOT NULL,
+            address TEXT NOT NULL,
+            businessHours VARCHAR(100) NOT NULL,
+            businessHoursOnSaturday VARCHAR(100) NOT NULL,
+            xcoordinate DECIMAL(10, 8) NOT NULL,
+            ycoordinate DECIMAL(11, 8) NOT NULL
         ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');

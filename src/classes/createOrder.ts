@@ -1,11 +1,13 @@
 import {AjaxService} from "@/services/ajax.service";
+import {GetLabel} from "@/classes/getLabel";
 
 export class CreateOrder {
     private ajaxService: AjaxService;
     private button: HTMLElement;
-
+    private ajaxUrl: string;
     constructor(ajaxUrl: string, buttonId: string) {
-        this.ajaxService = new AjaxService(ajaxUrl);
+        this.ajaxUrl = ajaxUrl;
+        this.ajaxService = new AjaxService(this.ajaxUrl);
 
         const button: HTMLElement | null = document.getElementById(buttonId);
         if (!button) {
@@ -27,9 +29,11 @@ export class CreateOrder {
     private async send(): Promise<void> {
         try {
             const data = this.getData();
-            console.log(data)
-            // Now send the FormData using AjaxService
             const response = await this.ajaxService.post("create_order", data);
+
+            if(response.success) {
+                this.replaceButton()
+            }
             console.log("Order created successfully:", response);
         } catch (err) {
             console.error("Failed to create order:", err);
@@ -59,5 +63,20 @@ export class CreateOrder {
             post_id: postId,
             meta_data: values,
         };
+    }
+
+    private replaceButton(): void {
+        const newButton = document.createElement("button");
+        newButton.className = "button";
+        newButton.id = "bexCreateLabel";
+        newButton.textContent = "Create Label";
+
+        new GetLabel(this.ajaxUrl, "bexCreateLabel");
+
+        newButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log("Create Label button clicked.");
+        });
+        this.button.parentNode?.replaceChild(newButton, this.button);
     }
 }
