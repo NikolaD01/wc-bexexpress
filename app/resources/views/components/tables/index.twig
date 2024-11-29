@@ -1,55 +1,35 @@
-<div class="wrap">
-    <button id="update-all-fields" class="button button-primary">Update All Fields</button>
-    <form id="update-fields-form">
-        <table class="wp-list-table widefat fixed striped">
-            <thead>
+<div>
+    <table class="wp-list-table widefat fixed striped">
+        <thead>
+        <tr>
+            {% for header in headers %}
+                <th scope="col">{{ header }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% if data is empty %}
             <tr>
-                {% for header in headers %}
-                    <th scope="col">{{ header }}</th>
-                {% endfor %}
+                <td colspan="{{ headers | length }}" style="text-align: center;">No entries found.</td>
             </tr>
-            </thead>
-            <tbody>
-            {% if data is empty %}
+        {% else %}
+            {% for row in data %}
                 <tr>
-                    <td colspan="{{ headers | length }}" style="text-align: center;">No entries found.</td>
+                    <td>{{ row[0]|default('N/A') }}</td>
+                    <td>
+                        <input
+                                type="text"
+                                name="bex_{{ row[0]|lower|replace({'_': ''}) }}"
+                                value="{{ row[1]|default('') }}"
+                                class="regular-text"
+                        />
+                    </td>
                 </tr>
-            {% else %}
-                {% for row in data %}
-                    <tr>
-                        {% for field in headers %}
-                            <td>
-                                {% if field == 'Value' %}
-                                    {# Render an input element with the name derived from the 'Name' field #}
-                                    <input
-                                            type="text"
-                                            name="{{ row['Name']|lower|replace({'_': ''}) }}"
-                                            value="{{ row['Value']|default('') }}"
-                                            class="regular-text"
-                                    />
-                                {% else %}
-                                    {{ row[field]|default('N/A') }}
-                                {% endif %}
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            {% endif %}
-            </tbody>
-        </table>
-    </form>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+    <p>
+        <button class="button" id="bexCreateShipment">Create Order</button>
+    </p>
 </div>
-
-<script>
-    document.getElementById('update-all-fields').addEventListener('click', function() {
-        const formData = new FormData(document.getElementById('update-fields-form'));
-
-        // Example: Output form data to console
-        for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-        }
-
-        // Replace the following with your AJAX/fetch logic
-        alert('Update all fields functionality triggered!');
-    });
-</script>

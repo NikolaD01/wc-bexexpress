@@ -20,7 +20,9 @@ class MetaBoxManager
         }
 
         add_action('add_meta_boxes', [$metaBox, 'addMetaBox']);
-        add_action('save_post', [$metaBox, 'saveMetaBox']);
+        add_action('edit_post', [$metaBox, 'saveMetaBox']);
+        add_action('save_post_shop_order', [$metaBox, 'saveMetaBox']);
+
     }
 
     public function getMetaBox() : ?MetaBoxInterface

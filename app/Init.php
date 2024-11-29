@@ -55,7 +55,9 @@ class Init
         new MetaBoxManager();
         new AjaxManager();
         $this->setCommands();
-        (new ScriptRegister())->enqueue('wc-bexpress','public/main.js');
+        ScriptRegister::enqueue('wc-bexpress','public/main.js');
+        ScriptRegister::enqueue('wc-admin-bexpress' , 'public/admin.js', true);
+
 
 //        $controllerRegistrar = new ControllerRegistrar($this->container);
 //        $controllerRegistrar->register();

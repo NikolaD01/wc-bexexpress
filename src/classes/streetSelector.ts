@@ -1,5 +1,5 @@
-import { AjaxService } from "../services/ajax.service";
-import { debounce } from "../utilities/debounce";
+import { AjaxService } from "@/services/ajax.service";
+import { debounce } from "@/utilities/debounce";
 
 export class StreetSelector {
     private ajaxService: AjaxService;

@@ -6,7 +6,8 @@
         "php": ">=8.0",
         "twig/twig": "^3.14",
         "php-di/php-di": "^7.0",
-        "coenjacobs/mozart": "^0.7.1"
+        "coenjacobs/mozart": "^0.7.1",
+        "guzzlehttp/guzzle": "^7.9"
     },
     "autoload": {
         "psr-4": {
@@ -25,7 +26,8 @@
             "packages": [
                 "twig/twig",
                 "psr/container",
-                "php-di/php-di"
+                "php-di/php-di",
+                "guzzlehttp/guzzle"
             ],
             "excluded_packages": [],
             "override_autoload": [],

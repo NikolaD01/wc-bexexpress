@@ -8,10 +8,14 @@ export default defineConfig({
         outDir: 'public',
         emptyOutDir: false,
         rollupOptions: {
-            input: './src/main.ts',
+            input: {
+                main: './src/main.ts',
+                admin: './src/admin.ts',
+            },
             output: {
-                entryFileNames: 'main.js',
-                format: 'iife',
+                entryFileNames: '[name].js',
+                format: 'esm',
+                inlineDynamicImports: false,
             },
         },
     },

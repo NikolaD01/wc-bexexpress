@@ -38,22 +38,34 @@ class ProductMetaBox implements MetaBoxInterface
         View::render('dashboard.twig', [
             'headers' => ['Name', 'Value'],
             'data' => [
-                ['Name' => 'commentPublic', 'Value' => 'Test comment',],
-                ['Name' => 'commentPrivate', 'Value' => '',],
-            ]]);
+                ['commentPublic', get_post_meta($order_id, 'bex_commentpublic', true)],
+                ['commentPrivate', get_post_meta($order_id,'bex_commentprivate', true)],
+                ['personalDelivery', get_post_meta($order_id,'bex_personaldelivery', true)],
+                ['returnSignedInvoices', get_post_meta($order_id, 'bex_returnsignedinvoices', true)],
+                ['returnPackage', get_post_meta($order_id, 'bex_returnpackage', true)],
+                ['payToSenderViaAccount', get_post_meta($order_id, 'bex_paytosenderviaaccount', true)],
+                ['bankTransferComment', get_post_meta($order_id, 'bex_banktransfercomment', true)],
+            ],
+        ]);
     }
 
-    public function saveMetaBox($post_id): void
+    public function saveMetaBox(): void
     {
-        if (!isset($_POST['product_meta_nonce']) || !wp_verify_nonce($_POST['product_meta_nonce'], 'product_meta_nonce')) {
-            return;
+        $post_id = $_GET['id'];
+        $meta_fields = [
+            'bex_commentpublic',
+            'bex_commentprivate',
+            'bex_personaldelivery',
+            'bex_returnsignedinvoices',
+            'bex_returnpackage',
+            'bex_paytosenderviaaccount',
+            'bex_banktransfercomment',
+        ];
+    error_log('test upade');
+        foreach ($meta_fields as $field) {
+            if (isset($_POST[$field])) {
+                update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
+            }
         }
-
-        if (!current_user_can('edit_post', $post_id)) {
-            return;
-        }
-
-      //  $sanitized = MetaBoxValidator::sanitize($_POST['custom_meta_field']);
-        update_post_meta($post_id, '_custom_meta_key', $_POST['custom_meta_field']);
     }
 }
