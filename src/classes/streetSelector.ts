@@ -1,17 +1,17 @@
-import { AjaxService } from "@/services/ajax.service";
+import { SelectorService } from "@/services/selector.service";
 import { debounce } from "@/utilities/debounce";
 
 export class StreetSelector {
-    private ajaxService: AjaxService;
+    private readonly ajaxUrl: string;
     private readonly cityField: HTMLSelectElement;
     private streetField: HTMLSelectElement;
     private readonly debouncedOnCityChange: (id: string) => void;
 
     constructor(ajaxUrl: string, cityFieldId: string, streetFieldId: string) {
-        this.ajaxService = new AjaxService(ajaxUrl);
+        this.ajaxUrl = ajaxUrl;
 
-        const cityField: HTMLSelectElement = document.querySelector<HTMLSelectElement>(`#${cityFieldId}`);
-        const streetField: HTMLSelectElement = document.querySelector<HTMLSelectElement>(`#${streetFieldId}`);
+        const cityField = document.querySelector<HTMLSelectElement>(`#${cityFieldId}`);
+        const streetField = document.querySelector<HTMLSelectElement>(`#${streetFieldId}`);
 
         if (!streetField || !cityField) {
             throw new Error("Street or city field not found in the DOM");
@@ -39,7 +39,7 @@ export class StreetSelector {
         }
 
         try {
-            const response = await this.ajaxService.post("checkout_streets", { place_id: id });
+            const response = await SelectorService.fetchStreets(this.ajaxUrl, id);
             this.populateStreets(response.data);
         } catch (error) {
             console.error("Failed to load streets:", error);

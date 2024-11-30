@@ -1,17 +1,19 @@
-import { AjaxService } from "@/services/ajax.service";
+import { SelectorService } from "@/services/selector.service";
 import { debounce } from "@/utilities/debounce";
+
 export class CitySelector {
-    private ajaxService: AjaxService;
+    private readonly ajaxUrl: string;
     private readonly stateField: HTMLSelectElement;
     private cityField: HTMLSelectElement;
     private streetField: HTMLSelectElement;
     private readonly debouncedOnStateChange: (selectedText: string) => void;
+
     constructor(ajaxUrl: string, stateFieldId: string, cityFieldId: string, streetFieldId: string) {
-        this.ajaxService = new AjaxService(ajaxUrl);
+        this.ajaxUrl = ajaxUrl;
 
         const stateField = document.querySelector<HTMLSelectElement>(`#${stateFieldId}`);
         const cityField = document.querySelector<HTMLSelectElement>(`#${cityFieldId}`);
-        const streetField : HTMLSelectElement = document.querySelector<HTMLSelectElement>(`#${streetFieldId}`);
+        const streetField = document.querySelector<HTMLSelectElement>(`#${streetFieldId}`);
 
         if (!stateField || !cityField) {
             throw new Error("State or city field not found in the DOM");
@@ -21,30 +23,24 @@ export class CitySelector {
         this.cityField = cityField;
         this.streetField = streetField;
 
-        this.debouncedOnStateChange = debounce(
-            this.onStateChangeFromTitleChange.bind(this),
-            300
-        );
+        this.debouncedOnStateChange = debounce(this.onStateChangeFromTitleChange.bind(this), 300);
 
         this.init();
     }
 
     private init(): void {
-        if (this.stateField) {
-            const observer = new MutationObserver((mutationsList) => {
-                for (const mutation of mutationsList) {
-                    if (mutation.type === "attributes" && mutation.attributeName === "title") {
-                        const selectedText = this.stateField.title;
-                        this.debouncedOnStateChange(selectedText);
-                    }
+        const observer = new MutationObserver((mutationsList) => {
+            for (const mutation of mutationsList) {
+                if (mutation.type === "attributes" && mutation.attributeName === "title") {
+                    const selectedText = this.stateField.title;
+                    this.debouncedOnStateChange(selectedText);
                 }
-            });
+            }
+        });
 
-            observer.observe(this.stateField, { attributes: true });
-        }
+        observer.observe(this.stateField, { attributes: true });
     }
 
-    // Handle state change caused by title change
     private async onStateChangeFromTitleChange(selectedText: string): Promise<void> {
         if (!selectedText) {
             this.clearCities();
@@ -53,20 +49,15 @@ export class CitySelector {
         this.clearStreets();
 
         try {
-            const cities = await this.ajaxService.post("checkout_cities", {
-                municipalities_name: selectedText,
-            });
-
+            const cities = await SelectorService.fetchCities(this.ajaxUrl, selectedText);
             this.populateCities(cities.data);
         } catch (error) {
             console.error("Failed to load cities:", error);
         }
     }
 
-
-
-    private clearStreets() : void {
-        this.streetField.innerHTML = "<option value=''>Izaberite ulicu</option>>";
+    private clearStreets(): void {
+        this.streetField.innerHTML = "<option value=''>Izaberite ulicu</option>";
         this.streetField.disabled = true;
     }
 

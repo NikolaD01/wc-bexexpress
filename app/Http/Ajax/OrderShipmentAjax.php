@@ -57,7 +57,6 @@ class OrderShipmentAjax implements AjaxInterface
                         wp_send_json_error("Failed to update shipment ID.");
                     }
                 }
-                wp_send_json_success($response);
             } else {
                 wp_send_json_error("Shipment creation failed: " . json_encode($response));
             }

@@ -1,11 +1,11 @@
-import {AjaxService} from "@/services/ajax.service";
+import { BexService } from "@/services/bex.service";
 
 export class GetLabel {
-    private ajaxService: AjaxService;
+    private ajaxUrl: string;
     private button: HTMLElement;
 
     constructor(ajaxUrl: string, buttonId: string) {
-        this.ajaxService = new AjaxService(ajaxUrl);
+        this.ajaxUrl = ajaxUrl;
 
         const button: HTMLElement | null = document.getElementById(buttonId);
         if (!button) {
@@ -18,23 +18,23 @@ export class GetLabel {
     }
 
     private init(): void {
-        this.button.addEventListener('click', (e) => {
+        this.button.addEventListener("click", (e) => {
             e.preventDefault();
             this.get();
-        })
+        });
     }
 
     private async get(): Promise<void> {
         try {
             const data = this.getData();
-            const response = await this.ajaxService.post('get_label', data)
+            const response = await BexService.getLabel(this.ajaxUrl, data);
 
             if (response.success) {
                 const fileUrl = response.data.fileUrl;
                 if (fileUrl) {
-                    const a = document.createElement('a');
+                    const a = document.createElement("a");
                     a.href = fileUrl;
-                    a.download = 'label.pdf';
+                    a.download = "label.pdf";
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
@@ -47,14 +47,12 @@ export class GetLabel {
         }
     }
 
-    private getData() : Record<string, any> {
+    private getData(): Record<string, any> {
         const hiddenInput = document.getElementById("post_ID") as HTMLInputElement;
         const postId = hiddenInput ? hiddenInput.value : null;
 
         return {
             post_id: postId,
-        }
+        };
     }
-
-
 }

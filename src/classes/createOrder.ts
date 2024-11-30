@@ -1,13 +1,12 @@
-import {AjaxService} from "@/services/ajax.service";
-import {GetLabel} from "@/classes/getLabel";
+import { BexService } from "@/services/bex.service";
+import { GetLabel } from "@/classes/getLabel";
 
 export class CreateOrder {
-    private ajaxService: AjaxService;
-    private button: HTMLElement;
     private ajaxUrl: string;
+    private button: HTMLElement;
+
     constructor(ajaxUrl: string, buttonId: string) {
         this.ajaxUrl = ajaxUrl;
-        this.ajaxService = new AjaxService(this.ajaxUrl);
 
         const button: HTMLElement | null = document.getElementById(buttonId);
         if (!button) {
@@ -20,7 +19,7 @@ export class CreateOrder {
     }
 
     private init(): void {
-        this.button.addEventListener('click', (e) => {
+        this.button.addEventListener("click", (e) => {
             e.preventDefault();
             this.send();
         });
@@ -29,17 +28,16 @@ export class CreateOrder {
     private async send(): Promise<void> {
         try {
             const data = this.getData();
-            const response = await this.ajaxService.post("create_order", data);
+            const response = await BexService.createShipment(this.ajaxUrl, data);
 
-            if(response.success) {
-                this.replaceButton()
+            if (response.success) {
+                this.replaceButton();
             }
             console.log("Order created successfully:", response);
         } catch (err) {
             console.error("Failed to create order:", err);
         }
     }
-
 
     private getData(): Record<string, any> {
         const hiddenInput = document.getElementById("post_ID") as HTMLInputElement;
@@ -70,13 +68,8 @@ export class CreateOrder {
         newButton.className = "button";
         newButton.id = "bexCreateLabel";
         newButton.textContent = "Create Label";
+        this.button.parentNode?.replaceChild(newButton, this.button);
 
         new GetLabel(this.ajaxUrl, "bexCreateLabel");
-
-        newButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            console.log("Create Label button clicked.");
-        });
-        this.button.parentNode?.replaceChild(newButton, this.button);
     }
 }
