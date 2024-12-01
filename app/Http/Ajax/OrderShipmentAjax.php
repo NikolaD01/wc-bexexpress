@@ -40,7 +40,6 @@ class OrderShipmentAjax implements AjaxInterface
 
         try {
             $response = json_decode($bexExpressClientService->createShipment($shipmentData), true);
-
             if (isset($response['shipmentsResultList'])) {
                 $shipmentResult = $response['shipmentsResultList'][0];
                 if (isset($shipmentResult['shipmentId'])) {

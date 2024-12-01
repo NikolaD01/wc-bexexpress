@@ -22,6 +22,41 @@ class Fields
                 'default' => '400',
                 'required' => true
             ),
+            'bex_first_name' => array(
+                'title' => __('First name', 'bex-express-shipping'),
+                'type' => 'text',
+                'description' => __('First name', 'bex-express-shipping'),
+            ),
+            'bex_last_name' => array(
+                'title' => __('Last name', 'bex-express-shipping'),
+                'type' => 'text',
+                'description' => __('Last name', 'bex-express-shipping'),
+            ),
+            'bex_municipalites' => array(
+                'title' => __('Municipality', 'bex-express-shipping'),
+                'type' => 'number',
+                'description' => __('Region of city, Municipality, ID from xml file', 'bex-express-shipping'),
+            ),
+            'bex_place' => array(
+                'title' => __('Place', 'bex-express-shipping'),
+                'type' => 'number',
+                'description' => __('Place/City, ID from xml file', 'bex-express-shipping'),
+            ),
+            'bex_street' => array(
+                'title' => __('Street', 'bex-express-shipping'),
+                'type' => 'number',
+                'description' => __('Street, ID from xml file', 'bex-express-shipping'),
+            ),
+            'bex_house_number' => array(
+                'title' => __('Street Number', 'bex-express-shipping'),
+                'type' => 'text',
+                'description' => __('Street Number', 'bex-express-shipping'),
+            ),
+            'bex_phonenumber' => array(
+                'title' => __('Phone number', 'bex-express-shipping'),
+                'type' => 'text',
+                'description' => __('Phone number of sender', 'bex-express-shipping'),
+            ),
             'bex_shipment_id' => array(
                 'title' => __('ShipmentId *', 'bex-express-shipping'),
                 'type' => 'text',
