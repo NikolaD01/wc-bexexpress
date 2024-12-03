@@ -13,8 +13,7 @@ class OrderShipmentAjax implements AjaxInterface
     public function handle() : void
     {
         $post_id = isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
-        $meta_data = json_decode($_POST['meta_data']);
-
+        $meta_data = $_POST['meta_data'];
         $baseUri = 'http://api.bex.rs:62502';
         $settings = get_option('woocommerce_bex_express_shipping_method_settings');
         $apiToken = $settings['bex_api_token'] ?? '';

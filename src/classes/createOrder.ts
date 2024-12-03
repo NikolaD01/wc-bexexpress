@@ -44,12 +44,14 @@ export class CreateOrder {
         const postId = hiddenInput ? hiddenInput.value : null;
 
         const container = document.getElementById("bex_order_meta_box");
-        const values: Record<string, string> = {};
+        const values: Record<string, string | boolean> = {};
 
         if (container) {
             const inputs = container.querySelectorAll<HTMLInputElement>('input[name^="bex"]');
             inputs.forEach((input) => {
-                if (input.name) {
+                if (input.type === "checkbox") {
+                    values[input.name] = input.checked;
+                } else {
                     values[input.name] = input.value;
                 }
             });
@@ -57,9 +59,10 @@ export class CreateOrder {
             console.error("Container with ID 'bex_order_meta_box' not found.");
         }
 
+
         return {
             post_id: postId,
-            meta_data: values,
+            meta_data: JSON.stringify(values),
         };
     }
 

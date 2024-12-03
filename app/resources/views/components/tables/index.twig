@@ -18,7 +18,7 @@
                     <td>{{ row[0]|default('N/A') }}</td>
                     <td>
                         <input
-                                type="text"
+                                type="{{ row[2]|default("text") }}"
                                 name="bex_{{ row[0]|lower|replace({'_': ''}) }}"
                                 value="{{ row[1]|default('') }}"
                                 class="regular-text"
@@ -30,6 +30,8 @@
         </tbody>
     </table>
     <p>
+        <button class="button" id="bexCreateShipment">Create Order</button>
+
         {% if not shipmentCreated %}
             <button class="button" id="bexCreateShipment">Create Order</button>
         {% else %}

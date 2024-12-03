@@ -45,10 +45,10 @@ class ProductMetaBox implements MetaBoxInterface
             'data' => [
                 ['commentPublic', get_post_meta($order_id, 'bex_commentpublic', true)],
                 ['commentPrivate', get_post_meta($order_id,'bex_commentprivate', true)],
-                ['personalDelivery', get_post_meta($order_id,'bex_personaldelivery', true)],
-                ['returnSignedInvoices', get_post_meta($order_id, 'bex_returnsignedinvoices', true)],
-                ['returnPackage', get_post_meta($order_id, 'bex_returnpackage', true)],
-                ['payToSenderViaAccount', get_post_meta($order_id, 'bex_paytosenderviaaccount', true)],
+                ['personalDelivery', get_post_meta($order_id,'bex_personaldelivery', true), "checkbox"],
+                ['returnSignedInvoices', get_post_meta($order_id, 'bex_returnsignedinvoices', true), "checkbox"],
+                ['returnPackage', get_post_meta($order_id, 'bex_returnpackage', true), "checkbox"],
+                ['payToSenderViaAccount', get_post_meta($order_id, 'bex_paytosenderviaaccount', true), "checkbox"],
                 ['bankTransferComment', get_post_meta($order_id, 'bex_banktransfercomment', true)],
             ],
         ]);

@@ -41,9 +41,11 @@ class BexExpressClientService extends AbstractClientService
      */
     public function getLabel(int $shipmentId, int $parcelNo = 1): mixed
     {
-        $endpoint = '/shipDNF/ship/getLabel';
+        $endpoint = '/shipDNF/ship/getLabelWithProperties';
 
         $queryParams = [
+            'pageSize' => 4,
+            'pagePosition' => 1,
             'shipmentId' => $shipmentId,
             'parcelNo' => $parcelNo,
         ];
