@@ -1,9 +1,9 @@
 import { AjaxService } from "@/services/ajax.service";
 
 export const AutocompleteService = {
-    async fetchMunicipalities(ajaxUrl: string, query: string): Promise<Array<{ id: string; name: string }>> {
+    async fetch(ajaxUrl: string, query: string, action: string): Promise<Array<{ id: string; name: string }>> {
         const ajaxService = new AjaxService(ajaxUrl);
-        const response = await ajaxService.post("get_municipalities", { query });
+        const response = await ajaxService.post(action, { query });
         return response.data
     },
 };

@@ -1,6 +1,6 @@
 import {CitySelector} from "@/classes/citySelector";
 import {StreetSelector} from "@/classes/streetSelector";
-import {MunicipalityAutocomplete} from "@/classes/autocomplete/municipalityAutocomplete";
+import {Autocomplete} from "@/classes/autocomplete";
 
 declare global {
     interface Window {
@@ -19,7 +19,10 @@ const init = () => {
         const autocomplete = document.getElementById('bex-autocomplete');
 
         if(autocomplete) {
-            new MunicipalityAutocomplete('billing_state', window.admin_globals.ajax_url)
+            new Autocomplete('billing_state', window.admin_globals.ajax_url, 'get_municipalities')
+            new Autocomplete('billing_city', window.admin_globals.ajax_url,'get_places')
+            new Autocomplete('billing_address_1', window.admin_globals.ajax_url,'get_streets')
+
 
         } else {
             const stateContainer = document.getElementById("select2-billing_state-container");

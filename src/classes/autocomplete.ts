@@ -2,20 +2,24 @@ import Fuse from 'fuse.js';
 import { AutocompleteService } from "@/services/autocomplete.service";
 import { debounce } from "@/utilities/debounce";
 
-export class MunicipalityAutocomplete {
+export class Autocomplete {
     private readonly containerId: string;
     private readonly ajaxUrl: string;
+    private readonly action: string;
+
     private inputElement: HTMLInputElement | null = null;
     private hiddenInputElement: HTMLInputElement | null = null;
     private dropdown: HTMLUListElement | null = null;
+
     private fuse: Fuse<{ id: string; name: string }> | null = null;
-    private readonly fetchMunicipalitiesDebounced: (...args: any[]) => void;
+    private readonly fetchDataDebounced: (...args: any[]) => void;
     private userSelected: boolean = false;
 
-    constructor(containerId: string, ajaxUrl: string) {
+    constructor(containerId: string, ajaxUrl: string, action: string) {
         this.containerId = containerId;
         this.ajaxUrl = ajaxUrl;
-        this.fetchMunicipalitiesDebounced = debounce(this.fetchMunicipalities.bind(this), 300);
+        this.action = action;
+        this.fetchDataDebounced = debounce(this.fetchData.bind(this), 300);
         this.initAutocomplete();
     }
 
@@ -31,7 +35,7 @@ export class MunicipalityAutocomplete {
             const query = (event.target as HTMLInputElement).value.trim();
             this.userSelected = false;
             if (query.length > 1) {
-                this.fetchMunicipalitiesDebounced(query);
+                this.fetchDataDebounced(query);
             } else {
                 this.clearDropdown();
                 if (this.hiddenInputElement) {
@@ -48,11 +52,11 @@ export class MunicipalityAutocomplete {
         });
     }
 
-    private async fetchMunicipalities(query: string): Promise<void> {
+    private async fetchData(query: string): Promise<void> {
         try {
-            const municipalities = await AutocompleteService.fetchMunicipalities(this.ajaxUrl, query);
-            if (municipalities) {
-                this.setupFuse(municipalities);
+            const results = await AutocompleteService.fetch(this.ajaxUrl, query, this.action);
+            if (results) {
+                this.setupFuse(results);
                 this.updateDropdown(query);
             } else {
                 this.clearDropdown();
@@ -63,8 +67,8 @@ export class MunicipalityAutocomplete {
         }
     }
 
-    private setupFuse(municipalities: Array<{ id: string; name: string }>): void {
-        this.fuse = new Fuse(municipalities, {
+    private setupFuse(data: Array<{ id: string; name: string }>): void {
+        this.fuse = new Fuse(data, {
             keys: ['name'],
             threshold: 0.3,
         });
@@ -83,7 +87,7 @@ export class MunicipalityAutocomplete {
             li.dataset.id = item.id;
 
             li.addEventListener('click', () => {
-                this.selectMunicipality(item);
+                this.selectItem(item);
             });
 
             this.dropdown!.appendChild(li);
@@ -94,11 +98,11 @@ export class MunicipalityAutocomplete {
         if (this.dropdown) this.dropdown.innerHTML = '';
     }
 
-    private selectMunicipality(municipality: { id: string; name: string }): void {
+    private selectItem(item: { id: string; name: string }): void {
         if (this.inputElement && this.hiddenInputElement) {
             this.userSelected = true;
-            this.inputElement.value = municipality.name;
-            this.hiddenInputElement.value = municipality.id;
+            this.inputElement.value = item.name;
+            this.hiddenInputElement.value = item.id;
         }
         this.clearDropdown();
     }
