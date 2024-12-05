@@ -16,6 +16,12 @@ class Fields
                 'description' => __('Bex API Token', 'bex-express-shipping'),
                 'required' => true
             ),
+            'bex_autocomplete_fields' => array(
+                'title' => __('Autocomplete fields', 'bex-express-shipping'),
+                'type' => 'checkbox',
+                'description' => __('When this field is checked your checkout will use autocomplete fields instead of select', 'bex-express-shipping'),
+                'default' => 'no'
+            ),
             'shipping_amount' => array(
                 'title' => __('Fixed shipping amount (RSD)', 'bex-express-shipping'),
                 'type' => 'text',
