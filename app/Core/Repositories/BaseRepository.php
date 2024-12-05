@@ -90,7 +90,6 @@ abstract class BaseRepository implements RepositoryInterface {
      */
     public function getAllWhere(array $where = null, array $select = null): ?array
     {
-
         $columns = '*';
         if ($select) {
             $columns = implode(', ', array_map(function ($column) {
@@ -102,8 +101,13 @@ abstract class BaseRepository implements RepositoryInterface {
         $values = [];
         if ($where) {
             foreach ($where as $key => $value) {
-                $conditions[] = "`{$key}` = %s";
-                $values[] = $value;
+                if (stripos($key, 'LIKE') !== false) {
+                    $conditions[] = "`" . str_replace(" LIKE", "", $key) . "` LIKE %s";
+                    $values[] = $value; 
+                } else {
+                    $conditions[] = "`{$key}` = %s";
+                    $values[] = $value;
+                }
             }
         }
 
@@ -116,6 +120,8 @@ abstract class BaseRepository implements RepositoryInterface {
 
         return $this->db()->get_results($prepared_query);
     }
+
+
 
 
     /**

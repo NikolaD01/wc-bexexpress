@@ -7,7 +7,7 @@ use WC_BE\Core\Factories\AjaxFactory;
 use WC_BE\Dependencies\GuzzleHttp\Exception\GuzzleException;
 use WC_BE\Http\Services\API\BexExpressClientService;
 
-class getLabelAjax implements ajaxInterface
+class GetLabelAjax implements ajaxInterface
 {
     /**
      * @throws GuzzleException
