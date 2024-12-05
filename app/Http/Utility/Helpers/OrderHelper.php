@@ -15,8 +15,8 @@ class OrderHelper
         foreach ($order->get_items() as $item_id => $item) {
             $product = $item->get_product();
             if ($product) {
-                $quantity = $item->get_quantity();
-                $weight = $product->get_weight();
+                $quantity = $item->get_quantity() ?? 0;
+                $weight = is_numeric( $product->get_weight()) ? (float) $product->get_weight() : 0;
 
                 $total_items += $quantity;
                 $total_weight += $weight * $quantity;
