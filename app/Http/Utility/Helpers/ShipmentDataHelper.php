@@ -15,13 +15,15 @@ class ShipmentDataHelper
         $shipmentCategory = OrderHelper::getShipmentCategory($packageDetails['total_weight']);
         $billingAddress = OrderHelper::getBillingAddress($order);
 
+        $city = self::getCity($billingAddress['city']);
+        $address = self::getAddress($billingAddress['address_1']);
+        $type = self::getAddressType($city, $address);
+
+
         $orderTotal = (float)$order->get_total();
         $payToSender = min($orderTotal, 1000000);
 
         return [
-            "post" => $post_id,
-            "meta" => $meta_data,
-            "settings" => $settings,
             "shipmentslist" => [
                 [
                     "shipmentId" => (int)$settings['bex_shipment_id'] ?? 0,
@@ -55,7 +57,7 @@ class ShipmentDataHelper
                             "place" => (int)$settings['bex_place'],
                             "street" => (int)$settings['bex_street'],
                             "houseNumber" => (int)$settings['bex_house_number'],
-                            "contactPerson" => $settings['bex_first_name']. " " . $settings['bex_last_name'],
+                            "contactPerson" => $settings['bex_first_name'] . " " . $settings['bex_last_name'],
                             "phone" => $settings['bex_phonenumber'],
                         ],
                         [
@@ -63,10 +65,10 @@ class ShipmentDataHelper
                             "nameType" => 1,
                             "name1" => $billingAddress['first_name'],
                             "name2" => $billingAddress['last_name'],
-                            "adressType" => 3,
+                            "adressType" => $type,
                             "municipalites" => (int)$billingAddress['state'],
-                            "place" => (int)$billingAddress['city'],
-                            "street" => (int)$billingAddress['address_1'],
+                            "place" => $city,
+                            "street" => $address,
                             "houseNumber" => (int)$billingAddress['address_2'],
                             "contactPerson" => $billingAddress['first_name'] . " " . $billingAddress['last_name'],
                             "phone" => $billingAddress['phone'],
@@ -78,11 +80,35 @@ class ShipmentDataHelper
                         [
                             "mode" => 1,
                             "type" => 1,
-                            "adress" => "",
+                            "address" => "",
                         ],
                     ],
                 ],
             ],
         ];
+    }
+
+    private static function getAddressType(int|string $city, int|string $address): int
+    {
+        $isCityInt = is_numeric($city) && ctype_digit((string)$city);
+        $isAddressInt = is_numeric($address) && ctype_digit((string)$address);
+
+        if ($isCityInt && $isAddressInt) {
+            return 3;
+        } elseif ($isCityInt || $isAddressInt) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
+    private static function getCity(int|string $city): int|string
+    {
+        return is_numeric($city) && ctype_digit((string)$city) ? (int)$city : $city;
+    }
+
+    private static function getAddress(int|string $address): int|string
+    {
+        return is_numeric($address) && ctype_digit((string)$address) ? (int)$address : $address;
     }
 }

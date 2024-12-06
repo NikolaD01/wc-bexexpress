@@ -2,6 +2,7 @@
 
 namespace WC_BE\Core\Managers;
 
+use WC_BE\Core\Factories\SeederFactory;
 use WC_BE\Core\Traits\DB;
 
 class TableManager
@@ -15,6 +16,61 @@ class TableManager
     public function __construct()
     {
         $this->initializeTables();
+
+        if ($this->shouldSeed()) {
+            $this->seedTables();
+        }
+    }
+
+
+    public function shouldSeed(): bool
+    {
+        $tables = [
+            'municipalities' => $this->db()->prefix . 'municipalities',
+            'places' => $this->db()->prefix . 'places',
+            'streets' => $this->db()->prefix . 'streets',
+        ];
+
+        foreach ($tables as $table) {
+            if ($this->tableExists($table) && $this->isTableEmpty($table)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a table exists in the database.
+     */
+    private function tableExists(string $table_name): bool
+    {
+        $query = $this->db()->prepare("SHOW TABLES LIKE %s", $table_name);
+        return (bool) $this->db()->get_var($query);
+    }
+
+    /**
+     * Check if a table is empty.
+     */
+    private function isTableEmpty(string $table_name): bool
+    {
+        $query = $this->db()->prepare("SELECT COUNT(*) FROM {$table_name}");
+        $count = $this->db()->get_var($query);
+        return (int)$count === 0;
+    }
+
+    /**
+     * Seed the tables with initial data.
+     */
+    private function seedTables(): void
+    {
+        $municipalities_seeder = SeederFactory::create('municipalities');
+        $places_seeder = SeederFactory::create('places');
+        $streets_seeder = SeederFactory::create('streets');
+
+        $municipalities_seeder->seed();
+        $places_seeder->seed();
+        $streets_seeder->seed();
     }
 
     /**
@@ -39,14 +95,7 @@ class TableManager
         return !$this->tableExists($table_name);
     }
 
-    /**
-     * Check if a table exists in the database.
-     */
-    private function tableExists(string $table_name): bool
-    {
-        $query = $this->db()->prepare("SHOW TABLES LIKE %s", $table_name);
-        return (bool) $this->db()->get_var($query);
-    }
+
 
     /**
      * Create the municipalities table.
@@ -157,4 +206,5 @@ class TableManager
             $this->db()->query($query);
         }
     }
+
 }

@@ -49,10 +49,10 @@ class OrderShipmentAjax implements AjaxInterface
                         if ($savedShipmentId) {
                             wp_send_json_success($response);
                         } else {
-                            wp_send_json_error("Failed to save shipment ID.");
+                            wp_send_json_error("Failed to save shipment ID : " . print_r($response, true));
                         }
                     } else {
-                        wp_send_json_error("Failed to update shipment ID.");
+                        wp_send_json_error("Failed to update shipment ID : ". print_r($response,true));
                     }
                 }
             } else {
