@@ -24,9 +24,6 @@ class ShipmentDataHelper
         $payToSender = min($orderTotal, 1000000);
 
         return [
-//            "post" => $post_id,
-//            "meta" => $meta_data,
-//            "settings" => $settings,
             "shipmentslist" => [
                 [
                     "shipmentId" => (int)$settings['bex_shipment_id'] ?? 0,
