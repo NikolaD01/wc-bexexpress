@@ -9,10 +9,6 @@ class TableManager
 {
     use DB;
 
-    /**
-     * TableManager constructor.
-     * Initialize the necessary tables when the class is instantiated.
-     */
     public function __construct()
     {
         $this->initializeTables();
@@ -21,7 +17,6 @@ class TableManager
             $this->seedTables();
         }
     }
-
 
     public function shouldSeed(): bool
     {
@@ -40,18 +35,12 @@ class TableManager
         return false;
     }
 
-    /**
-     * Check if a table exists in the database.
-     */
     private function tableExists(string $table_name): bool
     {
         $query = $this->db()->prepare("SHOW TABLES LIKE %s", $table_name);
-        return (bool) $this->db()->get_var($query);
+        return (bool)$this->db()->get_var($query);
     }
 
-    /**
-     * Check if a table is empty.
-     */
     private function isTableEmpty(string $table_name): bool
     {
         $query = $this->db()->prepare("SELECT COUNT(*) FROM {$table_name}");
@@ -59,9 +48,6 @@ class TableManager
         return (int)$count === 0;
     }
 
-    /**
-     * Seed the tables with initial data.
-     */
     private function seedTables(): void
     {
         $municipalities_seeder = SeederFactory::create('municipalities');
@@ -73,33 +59,23 @@ class TableManager
         $streets_seeder->seed();
     }
 
-    /**
-     * Initialize the database tables.
-     */
     private function initializeTables(): void
     {
         if ($this->shouldRunTableSetup()) {
             $this->createMunicipalitiesTable();
             $this->createPlacesTable();
             $this->createStreetsTable();
+           // $this->createParcelsTable();
             $this->addForeignKeys();
         }
     }
 
-    /**
-     * Check if the tables need to be set up.
-     */
     private function shouldRunTableSetup(): bool
     {
         $table_name = $this->db()->prefix . 'municipalities';
         return !$this->tableExists($table_name);
     }
 
-
-
-    /**
-     * Create the municipalities table.
-     */
     private function createMunicipalitiesTable(): void
     {
         $table_name = $this->db()->prefix . 'municipalities';
@@ -110,12 +86,9 @@ class TableManager
             name VARCHAR(255) NOT NULL
         ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
-        dbDelta($sql);
+        $this->db()->query($sql);
     }
 
-    /**
-     * Create the places table.
-     */
     private function createPlacesTable(): void
     {
         $table_name = $this->db()->prefix . 'places';
@@ -129,12 +102,9 @@ class TableManager
             KEY (municipalities_id)
         ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
-        dbDelta($sql);
+        $this->db()->query($sql);
     }
 
-    /**
-     * Create the streets table.
-     */
     private function createStreetsTable(): void
     {
         $table_name = $this->db()->prefix . 'streets';
@@ -147,14 +117,12 @@ class TableManager
             KEY (place_id)
         ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
-        dbDelta($sql);
+        $this->db()->query($sql);
     }
-    /**
-     * Create the parcels table.
-     */
+
     private function createParcelsTable(): void
     {
-        $table_name = $this->db()->prefix . 'parcels'; // Change to your desired table name
+        $table_name = $this->db()->prefix . 'parcels';
         $charset_collate = $this->db()->get_charset_collate();
 
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
@@ -174,13 +142,9 @@ class TableManager
             ycoordinate DECIMAL(11, 8) NOT NULL
         ) ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci {$charset_collate};";
 
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
+        $this->db()->query($sql);
     }
 
-    /**
-     * Add foreign keys to the tables.
-     */
     private function addForeignKeys(): void
     {
         $places_table = $this->db()->prefix . 'places';
@@ -194,7 +158,6 @@ class TableManager
              REFERENCES {$municipalities_table}(id) 
              ON DELETE CASCADE ON UPDATE CASCADE;",
 
-            // Add foreign key to `streets` table
             "ALTER TABLE {$streets_table} 
              ADD CONSTRAINT fk_streets_places 
              FOREIGN KEY (place_id) 
@@ -206,5 +169,4 @@ class TableManager
             $this->db()->query($query);
         }
     }
-
 }

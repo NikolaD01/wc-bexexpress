@@ -27,10 +27,12 @@ class PlacesSeeder extends BaseSeeder
             ];
 
             $this->repository->insert($data);
-
-            WP_CLI::log("Inserted into places: " . json_encode($data));
+            if (class_exists('WP_CLI')) {
+                WP_CLI::log("Inserted into places: " . json_encode($data));
+            }
         }
-
-        WP_CLI::success("Seeding complete for Places.csv");
+        if (class_exists('WP_CLI')) {
+            WP_CLI::success("Seeding complete for Places.csv");
+        }
     }
 }
